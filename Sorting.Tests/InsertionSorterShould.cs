@@ -13,16 +13,16 @@ namespace Sorting.Tests
 
 		[Theory]
 		[ClassData(typeof(TestData))]
-		public void SortAscending(IList<int> source)
+		public void SortAscending(IList<int> collection)
 		{
-			TestSortAscending(source, new InsertionSorter<int>());
+			TestSortAscending(collection, new InsertionSorter<int>());
 		}
 
 		[Theory]
 		[ClassData(typeof(TestData))]
-		public void SortDescending(IList<int> source)
+		public void SortDescending(IList<int> collection)
 		{
-			TestSortDescending(source, new InsertionSorter<int>());
+			TestSortDescending(collection, new InsertionSorter<int>());
 		}
 	}
 }

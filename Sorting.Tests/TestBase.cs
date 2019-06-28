@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Common;
+using Newtonsoft.Json;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -10,33 +11,36 @@ namespace Sorting.Tests
 	{
 		private readonly ITestOutputHelper _outputHelper;
 
-		public TestBase(ITestOutputHelper outputHelper)
+		protected TestBase(ITestOutputHelper outputHelper)
 		{
 			_outputHelper = outputHelper;
 		}
 
-		protected void TestSort(IList<int> input, IEnumerable<int> expected, ISorter<int> sorter, IComparer<int> comparer)
+		protected void TestSort(IList<int> collection, ISorter<int> sorter, IComparer<int> comparer)
 		{
-			_outputHelper.WriteLine($"Input:\t{string.Join(",", input)}.");
-			_outputHelper.WriteLine($"Sorted:\t{sorter.GetType().Name}.");
-			_outputHelper.WriteLine($"Expected:\t{string.Join(",", input)}.");
+			_outputHelper.WriteLine($"Input:\t{string.Join(",", collection)}.");
+			_outputHelper.WriteLine($"Sorter:\t{sorter.GetType().Name}.");
+			_outputHelper.WriteLine($"Expected:\t{string.Join(",", collection)}.");
+			var clone = JsonConvert.DeserializeObject<IList<int>>(
+				JsonConvert.SerializeObject(collection));
+			var expected = clone.OrderBy(x => x, comparer);
 
-			sorter.Sort(input, comparer);
+			sorter.Sort(collection, comparer);
 
-			Assert.Equal(expected, input);
+			Assert.Equal(expected, collection);
 		}
 
 		protected void TestSortAscending(
-			IList<int> source, ISorter<int> sorter, IComparer<int> comparer = null)
+			IList<int> collection, ISorter<int> sorter, IComparer<int> comparer = null)
 		{
 			comparer ??= Comparer<int>.Default;
-			TestSort(source, source.OrderBy(x => x), sorter, comparer);
+			TestSort(collection, sorter, comparer);
 		}
 
-		protected void TestSortDescending(IList<int> source, ISorter<int> sorter, IComparer<int> comparer = null)
+		protected void TestSortDescending(IList<int> collection, ISorter<int> sorter, IComparer<int> comparer = null)
 		{
 			comparer ??= new ComparerInverted<int>(Comparer<int>.Default);
-			TestSort(source, source.OrderByDescending(x => x), sorter, comparer);
+			TestSort(collection, sorter, comparer);
 		}
 	}
 }

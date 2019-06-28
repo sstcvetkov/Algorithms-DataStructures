@@ -1,13 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Common
 {
 	public class ComparerInverted<T> : IComparer<T>
 	{
-		private readonly IComparer _comparer;
+		private readonly IComparer<T> _comparer;
 
-		public ComparerInverted(IComparer comparer)
+		public ComparerInverted(IComparer<T> comparer)
 		{
 			_comparer = comparer;
 		}

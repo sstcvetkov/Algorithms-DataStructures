@@ -18,40 +18,31 @@ namespace Common
 		public static bool IsEqualTo<T>(this T first, T second, IComparer<T> comparer = null) 
 			where T : IComparable<T>
 		{
-			return (comparer == null
-				? first.CompareTo(second)
-				: comparer.Compare(first, second)) == 0;
+			return (comparer?.Compare(first, second) ?? first.CompareTo(second)) == 0;
 		}
 
 		public static bool IsGreaterThan<T>(this T first, T second, IComparer<T> comparer) 
 			where T : IComparable<T>
 		{
-			return (comparer == null 
-				? first.CompareTo(second)
-				: comparer.Compare(first, second)) > 0;
+			return (comparer?.Compare(first, second) ?? first.CompareTo(second)) > 0;
 		}
 
 		public static bool IsGreaterThanOrEqualTo<T>(this T first, T second, IComparer<T> comparer) 
 			where T : IComparable<T>
 		{
-			return (comparer == null 
-				? first.CompareTo(second)
-				: comparer.Compare(first, second)) >= 0;
+			return (comparer?.Compare(first, second) ?? first.CompareTo(second)) >= 0;
 		}
 
 		public static bool IsLessThan<T>(this T first, T second, IComparer<T> comparer) 
 			where T : IComparable<T>
 		{
-			return (comparer == null ? first.CompareTo(second)
-		       : comparer.Compare(first, second)) < 0;
+			return (comparer?.Compare(first, second) ?? first.CompareTo(second)) < 0;
 		}
 
 		public static bool IsLessThanOrEqualTo<T>(this T first, T second, IComparer<T> comparer) 
 			where T : IComparable<T>
 		{
-			return (comparer == null 
-		       ? first.CompareTo(second)
-		       : comparer.Compare(first, second)) <= 0;
+			return (comparer?.Compare(first, second) ?? first.CompareTo(second)) <= 0;
 		}
 	}
 }
