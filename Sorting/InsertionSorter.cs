@@ -1,37 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Common;
 
 namespace Sorting
 {
-	public class InsertionSorter<T> : ISorter<T>
+	public class InsertionSorter<T> : SorterBase<T>
 		where T : IComparable<T>
 	{
-		public void Sort(T[] source, IComparer<T> comparer = null)
-			=> Sort((IList<T>) source, comparer);
-
-		public void Sort(IList<T> source, IComparer<T> comparer = null)
+		protected override void Implementation(IList<T> collection, IComparer<T> comparer = null)
 		{
-			Debug.Write($"{nameof(InsertionSorter<T>)}, source:\n" +
-			            string.Join(",", source));
+			Classic(collection, comparer);
+			//TwoForCircles(collection, comparer);
+		}
 
-			for (var index = 1; index < source.Count; index++)
+		private void Classic(IList<T> collection, IComparer<T> comparer = null)
+		{
+			for (var i = 1; i < collection.Count; i++)
 			{
-				var v = source[index];
-				var subIndex = index - 1;
-
-				while (subIndex >= 0 && source[subIndex].IsGreaterThan(v, comparer))
+				var value = collection[i];
+				var j = i - 1;
+				while (j >= 0 && collection[j].IsGreaterThan(value, comparer))
 				{
-					source[subIndex + 1] = source[subIndex];
-					subIndex--;
-
-					Debug.WriteLine(string.Join(",", source));
+					collection[j + 1] = collection[j];
+					j--;
+					Debug(collection);
 				}
 
-				source[subIndex + 1] = v;
+				collection[j + 1] = value;
+				Debug(collection);
+			}
+		}
 
-				Debug.WriteLine(string.Join(",", source));
+		private void TwoForCircles(IList<T> collection, IComparer<T> comparer = null)
+		{
+			for (var i = 1; i < collection.Count; i++)
+			{
+				var value = collection[i];
+				var j = i - 1;
+				for (;j >= 0 && collection[j].IsGreaterThan(value, comparer); j--)
+				{
+					collection[j+1] = collection[j];
+					Debug(collection);
+				}
+
+				collection[j+1] = value;
+				Debug(collection);
 			}
 		}
 	}
